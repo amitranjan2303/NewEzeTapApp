@@ -6,7 +6,7 @@ plugins {
 
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 0
+ext.versionPatch = 1
 
 android {
     compileSdkVersion 33
