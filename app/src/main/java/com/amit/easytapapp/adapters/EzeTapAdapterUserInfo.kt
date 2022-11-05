@@ -5,9 +5,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.amit.easytapapp.R
-import com.amit.easytapapp.callback.ItemActionCallBack
-import com.amit.easytapapp.databinding.ItemButtonBinding
-import com.amit.easytapapp.databinding.ItemEditTextBinding
 import com.amit.easytapapp.databinding.ItemLabelBinding
 import com.amit.easytapapp.databinding.ItemUserInfoBinding
 import com.amit.easytapapp.models.UIData
@@ -30,7 +27,7 @@ class EzeTapAdapterUserInfo : RecyclerView.Adapter<BaseViewHolder>() {
                 )
             viewHolder = ItemLabelViewHolder(viewBinding)
         } else if(viewType == R.layout.item_user_info){
-            var viewBinding: ItemUserInfoBinding =
+            val viewBinding: ItemUserInfoBinding =
                 DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
                     viewType,
@@ -47,23 +44,23 @@ class EzeTapAdapterUserInfo : RecyclerView.Adapter<BaseViewHolder>() {
         val model: UIData? = itemList?.get(position)
         if (holder is ItemLabelViewHolder) {
             model?.let {
-                (holder as ItemLabelViewHolder).bind(model)
+                holder.bind(model)
             }
         } else if (holder is UserInfoViewHolder) {
             model?.let {
-                (holder as UserInfoViewHolder).bind(model)
+                holder.bind(model)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        var item: UIData? = itemList?.get(position)
-        var viewType = -1;
-        item?.uitype?.let {
-            if (it.equals("label")) {
-                viewType = R.layout.item_label
+        val item: UIData? = itemList?.get(position)
+        var viewType = -1
+        item?.uiType?.let {
+            viewType = if (it.equals("label")) {
+                R.layout.item_label
             } else {
-                viewType = R.layout.item_user_info
+                R.layout.item_user_info
             }
         }
         return viewType

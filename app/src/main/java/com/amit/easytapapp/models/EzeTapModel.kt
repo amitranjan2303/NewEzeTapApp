@@ -11,7 +11,6 @@ data class EzeTapModel(
     var logoUrl: String? = null,
     @SerializedName("heading-text")
     var headingText: String? = null,
-    var uidata: ArrayList<UIData>? = null
-):Parcelable {
-
-}
+    @SerializedName("uidata")
+    var uiData: ArrayList<UIData>? = null
+):Parcelable

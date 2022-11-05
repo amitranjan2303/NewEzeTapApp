@@ -1,7 +1,5 @@
 package com.amit.easytapapp.viewHolders
 
-import com.amit.easytapapp.callback.ItemActionCallBack
-import com.amit.easytapapp.databinding.ItemButtonBinding
 import com.amit.easytapapp.databinding.ItemUserInfoBinding
 import com.amit.easytapapp.models.UIData
 

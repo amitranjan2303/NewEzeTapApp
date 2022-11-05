@@ -1,5 +1,6 @@
 package com.amit.easytapapp.viewmodels
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,18 +8,15 @@ import com.amit.easytapapp.models.EzeTapModel
 import com.amit.ezetapnetwork.repository.EzeTapNetworkRepository
 import com.amit.ezetapnetwork.repository.INetworkResponse
 import com.google.gson.Gson
-import java.lang.reflect.Executable
 
 class EzeTapViewModel : ViewModel() {
 
-    private var ezeTapNetworkRepository: EzeTapNetworkRepository
-    private var responseLiveData: MutableLiveData<EzeTapModel>
-    private var errorLiveData: MutableLiveData<Exception>
+    private var ezeTapNetworkRepository: EzeTapNetworkRepository = EzeTapNetworkRepository()
+    private var responseLiveData: MutableLiveData<EzeTapModel> = MutableLiveData<EzeTapModel>()
+    private var responseBitmapLiveData: MutableLiveData<Bitmap> = MutableLiveData<Bitmap>()
+    private var errorLiveData: MutableLiveData<Exception> = MutableLiveData<Exception>()
 
     init {
-        responseLiveData = MutableLiveData<EzeTapModel>()
-        errorLiveData = MutableLiveData<Exception>()
-        ezeTapNetworkRepository = EzeTapNetworkRepository()
         ezeTapNetworkRepository.addNetworkResponseCallback(getNetworkResponseCallBack())
     }
 
@@ -27,12 +25,20 @@ class EzeTapViewModel : ViewModel() {
         return responseLiveData
     }
 
+    fun getResponseBitmapLiveData(): LiveData<Bitmap> {
+        return responseBitmapLiveData
+    }
+
     fun getNetworkErrorLiveData(): LiveData<Exception> {
         return errorLiveData
     }
 
     fun getNetworkResponse() {
-        ezeTapNetworkRepository.ezeTapNetworkRequestCall()
+        ezeTapNetworkRepository.fetchCustomUI("https://demo.ezetap.com/mobileapps/android_assignment.json")
+    }
+
+    fun fetchImage(url: String?) {
+        ezeTapNetworkRepository.fetchImage(url)
     }
 
     override fun onCleared() {
@@ -43,10 +49,18 @@ class EzeTapViewModel : ViewModel() {
     private fun getNetworkResponseCallBack(): INetworkResponse {
         val networkCallback = object : INetworkResponse {
 
-            override fun onResponseSuccess(response: String) {
-                val gson = Gson()
-                val ezeTapModel: EzeTapModel = gson.fromJson(response, EzeTapModel::class.java)
-                responseLiveData.value = ezeTapModel
+            override fun onResponseSuccess(response: Any?) {
+                if (response is String) {
+                    val gson = Gson()
+                    val ezeTapModel: EzeTapModel =
+                        gson.fromJson(response, EzeTapModel::class.java)
+                    responseLiveData.value = ezeTapModel
+                    ezeTapModel.logoUrl?.let { imageUrl ->
+                        fetchImage(imageUrl)
+                    }
+                } else if (response is Bitmap) {
+                    responseBitmapLiveData.value = response
+                }
             }
 
             override fun onResponseError(e: Exception) {

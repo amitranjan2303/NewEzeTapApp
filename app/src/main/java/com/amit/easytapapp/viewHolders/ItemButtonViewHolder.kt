@@ -9,9 +9,9 @@ class ItemButtonViewHolder(val binding: ItemButtonBinding) : BaseViewHolder(bind
     private var itemActionCallBack: ItemActionCallBack? = null
     override fun bind(item: UIData) {
         binding.datamodel = item
-        binding.btnSubmit.setOnClickListener({
+        binding.btnSubmit.setOnClickListener {
             itemActionCallBack?.onItemClick(adapterPosition)
-        })
+        }
     }
 
     fun setItemActionCallBack(itemActionCallBack: ItemActionCallBack?) {

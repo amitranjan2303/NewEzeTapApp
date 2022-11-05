@@ -2,7 +2,6 @@ package com.amit.easytapapp
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,11 +27,10 @@ class UserInfoActivity : AppCompatActivity() {
             } else {
                 uiDataBundle?.getParcelable("user-info")
             }
-        Log.d("Amit ", "UserInfo " + model)
-        setUpRecyclerView(model?.uidata)
+        setUpRecyclerView(model?.uiData)
     }
 
-    fun setUpRecyclerView(list: ArrayList<UIData>?) {
+    private fun setUpRecyclerView(list: ArrayList<UIData>?) {
         binding.rv.layoutManager = LinearLayoutManager(this)
         mAdapter = EzeTapAdapterUserInfo()
         mAdapter?.updateList(list)
