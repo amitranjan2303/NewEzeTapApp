@@ -1,0 +1,4 @@
+rootProject.name = "NewEzeTapApp"
+include ':app'
+//include ':ezetap-network'
+include ':android-ezetap-network'
